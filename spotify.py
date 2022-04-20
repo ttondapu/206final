@@ -33,7 +33,7 @@ def get_artist_albums(artistid, offset, cur):
     returns a list of information about each of an artist's albums
     '''
     #must update token every time :/ go to https://developer.spotify.com/console/get-album/
-    token = 'BQBbCpsLEy0Z1jAwxsJkSIWytwQvO4mHQMp8L5U9P_V01Wea6jZAfmUREVzQ1QvMjHTcX7nyFrt9AwK2IV0m2TMhw8KT98pKc2Mkl9YUDspXXcPAcXROD447f6fisnMOdPvR5ckdSXDuQsmw6KrMxOc1V50xu1ejGdw'
+    token = 'BQAL2bXbP1tX_kJvaiFx_jzxNAQuFSC_M4CL4RxEnUqRYme6b21bdl6BYAjaxKLcMX5kNfHKgMeczvgoh3IIvjVeSOQ05EGv7Pi9zasT7aYGSvxqcrdVh45X8a48paLFj1255NyCEgnvODQwmmboPz2EMfVsF9H7pII'
     url = artistalbumsurl(artistid)
     param = {'limit': 25,'offset': offset, 'access_token': token}
     response = requests.get(url, params = param)
