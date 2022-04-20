@@ -7,22 +7,32 @@ import sqlite3
 import matplotlib.pyplot as plt
 
 def createDB(filename):
+    '''
+    initializes database
+    '''
     path = os.path.dirname(os.path.abspath(__file__))
     conn = sqlite3.connect(path+'/'+filename)
     cur = conn.cursor()
     return cur, conn
 
 def artistalbumsurl(id):
-    #spotify:artist:4O15NlyKLIASxsJ0PrXPfz
-    #spotify:track:4cOdK2wGLETKBW3PvgPWqT
+    '''
+    generates a url to access an artist's discography
+    '''
     return "https://api.spotify.com/v1/artists/" + id + "/albums"
 
 def albumurl(id):
+    '''
+    generates a url to access a specific album
+    '''
     return "https://api.spotify.com/v1/albums/" + id
 
 def get_artist_albums(artistid, offset, cur): 
-    #must update token every time :/
-    #link here https://developer.spotify.com/console/get-album/
+    '''
+    just a test function to familiarize myself with spotify's API,
+    returns a list of information about each of an artist's albums
+    '''
+    #must update token every time :/ go to https://developer.spotify.com/console/get-album/
     token = 'BQBbCpsLEy0Z1jAwxsJkSIWytwQvO4mHQMp8L5U9P_V01Wea6jZAfmUREVzQ1QvMjHTcX7nyFrt9AwK2IV0m2TMhw8KT98pKc2Mkl9YUDspXXcPAcXROD447f6fisnMOdPvR5ckdSXDuQsmw6KrMxOc1V50xu1ejGdw'
     url = artistalbumsurl(artistid)
     param = {'limit': 25,'offset': offset, 'access_token': token}
@@ -48,6 +58,9 @@ def get_artist_albums(artistid, offset, cur):
     return data
 
 def main():
+    '''
+    putting it all together
+    '''
     favartists = {'Lil Uzi Vert' : '4O15NlyKLIASxsJ0PrXPfz',
         'Olivia Rodrigo' : '1McMsnEElThX1knmY4oliG', 
         'Ed Sheeran' : "6eUKZXaKkcviH0Ku9w2n3V",
