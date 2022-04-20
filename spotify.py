@@ -2,11 +2,8 @@ import requests
 from bs4 import BeautifulSoup as bs
 import json
 import os
-import sys
 import matplotlib
 import sqlite3
-import unittest
-import csv
 import matplotlib.pyplot as plt
 
 def createDB(filename):
