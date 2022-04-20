@@ -44,7 +44,7 @@ def get_artist_albums(artistid, offset, cur):
         #https://developer.spotify.com/documentation/web-api/reference/#/operations/get-an-album
         #list of possible keys ^
         if totaltracks > 3: #to ensure we aren't including singles as albums
-            data.append((title, date, totaltracks))
+            data.append((title, date))
     return data
 
 def main():
