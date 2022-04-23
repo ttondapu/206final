@@ -1,0 +1,42 @@
+import requests
+from bs4 import BeautifulSoup as bs
+import json
+import os
+import matplotlib
+import sqlite3
+import matplotlib.pyplot as plt
+
+
+'''artists: 'Lil Uzi Vert',
+            'Olivia Rodrigo', 
+            'Ed Sheeran',
+            'Post Malone',
+            'The Weeknd',
+            'Ariana Grande',
+            'Justin Bieber','''
+
+def createDB(filename):
+    '''
+    initializes database
+    '''
+    path = os.path.dirname(os.path.abspath(__file__))
+    conn = sqlite3.connect(path+'/'+filename)
+    cur = conn.cursor()
+    return cur, conn
+
+def artist_followers(artist_html):
+
+    '''
+    generates the number of followers for a given artist and file saved from an artist's SoundCloud page
+
+    '''
+    with open(artist_html) as f:
+        soup = bs(f, 'html.parser')
+    
+    num_followers = soup.find('a', rel = "nofollow")
+
+    return num_followers
+
+
+artist_followers('lil_uzi_vert_artist.html')
+
