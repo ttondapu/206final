@@ -33,9 +33,12 @@ def artist_followers(artist_html):
     with open(artist_html) as f:
         soup = bs(f, 'html.parser')
     
-    num_followers = soup.find('a', rel = "nofollow")
-
-    return num_followers
+    num_followers = soup.find('a', class_ = "infoStats__statLink sc-link-light sc-link-primary").get('title')
+    s = num_followers.split()
+    s = s[0].replace(',', '')
+    num = int(s)
+    print(num)
+    return "hrello"
 
 
 artist_followers('lil_uzi_vert_artist.html')
