@@ -93,12 +93,12 @@ def main():
     favartists = {'Ed sheeran' : '6eUKZXaKkcviH0Ku9w2n3V',
     'The Weeknd' : '1Xyo4u8uXC1ZmMpatF05PJ',  
     'Ariana Grande'	: '66CXWjxzNUsdJxJ2JdwvnR',
-    'Justin bieber' : '1uNFoZAHBGtllmzznpCI3s',
-    'Taylor swift' : '06HL4z0CvFAxyc27GXpf02',
+    'Justin Bieber' : '1uNFoZAHBGtllmzznpCI3s',
+    'Taylor Swift' : '06HL4z0CvFAxyc27GXpf02',
     'Drake' : '3TVXtAsR1Inumwj472S9r4',
     'Eminem' : '7dGJo4pcD2V6oG8kP0tJRR',
     'Post Malone' : '246dkjvS1zLTtiykXe5h60',
-    'Kanye' : '5K4W6rqBFWDnAN6FQUkS6x',
+    'Kanye West' : '5K4W6rqBFWDnAN6FQUkS6x',
     'Juice Wrld' :'4MCBfE4596Uoi2O4DtmEMz'}
     
     cur, conn = createDB('spotify.db')
@@ -110,10 +110,9 @@ def main():
         start = 0
 
     token = 'BQDO6dUrWwNWoY6BZWU3VcaNFWuOGGlt0656i-pFH0LcWiRJ1DuDk4_f-qdBWFS1OUvnCj-qAEmMyTEdZEuTylss3YdML1uUItboQs-ZsmCib5aAECinoXfMT4Ms_8O3iX9_KDpI1FycPH4KjjcOVoMNcBrZfR66ML8'
-    data = create_table_two(favartists['Lil Uzi Vert'], token, start)
-    print(data) #to see if the api is working
-    print()
-    data = create_table_one(favartists['Lil Uzi Vert'], token, start)
-    print(data)
+    for k in favartists.values():
+        data = create_table_two(k, token, start)
+        print(data)
+        print()
 
 main()
