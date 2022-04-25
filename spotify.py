@@ -130,7 +130,7 @@ def main():
     start = 0
     #must update token every time :/ go to https://developer.spotify.com/console/get-album/
     token = 'BQCwrYVcmzc1HggMwAtdobeyFLu9dfxxSFkfC3yZeTFaKIeRQcCv6wIsN9j3wc461aU7HqTCSbYx4i8U-x6TQtW7uXiLQBYYZatTfo-SH1B_UdA-cts9mmITjpGnO_rladXG_sPdmAXyWb3caIJ_iNwfZLFOodojBE8'
-    cur, conn = createDB('spotify.db')
+    cur, conn = createDB('finalproj.db')
     create_spotifyartists_table(favartists, token, start, cur, conn)
     create_spotifyalbums_table(favartists, token, start, cur, conn)
 

@@ -1,8 +1,38 @@
 import requests
-import os
+from bs4 import BeautifulSoup as bs
 import json
+import os
+import matplotlib
+import sqlite3
+import matplotlib.pyplot as plt
 
-bearer_token = 'AAAAAAAAAAAAAAAAAAAAAIRqbwEAAAAAsGxXkoOd1FhqAr6cwMKspjB0ioM%3DUwmyqZIUbs3R5VLdmN8XUe0y5S1eLzlAnRGW33CWMAafORu9Ik'
+bearer_token = 'AAAAAAAAAAAAAAAAAAAAAIRqbwEAAAAA4bw%2B4KetqBn%2BP57DDgFOKCZN6Qs%3DQJGvijx8WwBq28D4pUOZ2ZLMHicJe7g4A3cJGiKs9wDWigyQM0'
+
+def createDB(filename):
+    '''
+    initializes database
+    '''
+    path = os.path.dirname(os.path.abspath(__file__))
+    conn = sqlite3.connect(path+'/'+filename)
+    cur = conn.cursor()
+    return cur, conn
+
+def setUpTwitterTable(favartists, cur, conn):
+    cur.execute('DROP TABLE IF EXISTS twitter')
+    cur.execute('CREATE TABLE twitter (artist_id INTEGER UNIQUE PRIMARY KEY, twitter_handle TEXT, follower_count INTEGER, tweet_count INETEGER)')
+    counter = 0
+    for i in favartists.keys():
+        print(i)
+        url = create_url(favartists[i])
+        data = get_artist_info(url)
+        if favartists[i] != '0':
+            twitter_handle = data[0]
+            follower_count = data[1]
+            tweet_count = data[2]
+            artist_id = counter
+            cur.execute("INSERT OR IGNORE INTO Twitter (artist_id, twitter_handle, follower_count, tweet_count) VALUES (?,?,?,?)", (artist_id, twitter_handle, follower_count, tweet_count))
+            counter += 1
+    conn.commit()
 
 def create_url(user_id):
     '''
@@ -27,8 +57,18 @@ def get_artist_info(url):
     return((json_response['data']['username'], json_response['data']['public_metrics']['followers_count'], json_response['data']['public_metrics']['tweet_count']))
 
 def main():
-    url = create_url(1599608046) 
-    #lil uzi vert for example
-    print(get_artist_info(url))
+    favartists = {'Ed Sheeran' : '85452649',
+    'The Weeknd' : '255388236',  
+    'Billie Eilish'	: '2150327072',
+    'Justin Bieber' : '27260086',
+    'Taylor Swift' : '17919972',
+    'Drake' : '27195114',
+    'Eminem' : '22940219',
+    'Post Malone' : '913812620',
+    'Kanye West' : '169686021',
+    'Juice Wrld' :'3676932858'}
+
+    cur, conn = createDB('finalproj.db')
+    setUpTwitterTable(favartists, cur, conn)
 
 main()
