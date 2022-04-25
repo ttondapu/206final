@@ -36,7 +36,7 @@ def artist_followers(artist_html):
     num = int(s) #to make integer
     return num
 
-def album_count(artist_html):
+def track_count(artist_html):
     num_tracks = 0
     with open(artist_html) as f:
         soup = bs(f, 'html.parser')
@@ -45,11 +45,11 @@ def album_count(artist_html):
     track_list = []
     track_tag = soup.find_all('a', class_ = "sc-link-primary soundTitle__title sc-link-dark sc-text-h4")
     for tag in track_tag:
-        title = tag.find('span', class_ = '').text.strip()
+        title = tag.find('span', class_ = '')
         track_list.append(title)
     for track in track_list:
         num_tracks += 1
-  
+    print(num_tracks)  
     return num_tracks
 
 
@@ -68,3 +68,5 @@ artists = { #change
     'Juice Wrld': ['uiceheidd']
 }
 
+
+track_count('olivia_rodrigo.html')
