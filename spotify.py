@@ -15,6 +15,25 @@ def createDB(filename):
     cur = conn.cursor()
     return cur, conn
 
+def create_spotifyartists_table(favartists, token, offset, cur, conn):
+    cur.execute("DROP TABLE IF EXISTS spotifyartists")
+    cur.execute("CREATE TABLE IF NOT EXISTS spotifyartists (artistid INTEGER PRIMARY KEY UNIQUE, artistname TEXT, numfollowers INTEGER, numtracks INTEGER)")
+    for i in range(len(list(favartists.values()))):
+        insertval = spot_data_one(list(favartists.values())[i], token, offset)
+        cur.execute("INSERT OR IGNORE INTO spotifyartists (artistid,artistname,numfollowers,numtracks) VALUES (?,?,?,?)",(i, insertval[0], insertval[1], insertval[2])) 
+    conn.commit()
+
+def create_spotifyalbums_table(favartists, token, offset, cur, conn):
+    counter = 0
+    cur.execute("DROP TABLE IF EXISTS spotifyalbums")
+    cur.execute("CREATE TABLE IF NOT EXISTS spotifyalbums (artistid INTEGER, albumid TEXT, albumname TEXT UNIQUE PRIMARY KEY, length INTEGER, releasedate STRING)")
+    for i in range(len(list(favartists.values()))):
+        insertval = spot_data_two(list(favartists.values())[i], token, offset)
+        for album in insertval:
+            cur.execute("INSERT OR IGNORE INTO spotifyalbums (artistid,albumid,albumname,length,releasedate) VALUES (?,?,?,?,?)", (i, counter, album[0], album[1], album[2]))
+            counter += 1 #increment unique id, but this skips sometimes because artists have duplicates
+    conn.commit()
+
 def artistalbumsurl(artistid):
     '''
     generates a url to access an artist's discography
@@ -33,11 +52,10 @@ def artisturl(artistid):
     '''
     return "https://api.spotify.com/v1/artists/" + artistid
 
-def create_table_two(artistid, token, offset): 
+def spot_data_two(artistid, token, offset): 
     '''
     returns list of an artist's releases with number of tracks and release date
     '''
-    #must update token every time :/ go to https://developer.spotify.com/console/get-album/
     tracklist = []
     url = artistalbumsurl(artistid)
     param = {'limit': 25,'offset': offset, 'access_token': token}
@@ -59,17 +77,16 @@ def create_table_two(artistid, token, offset):
         #list of possible keys ^
     return tracklist
 
-def create_table_one(artistid, token, offset): 
+def spot_data_one(artistid, token, offset): 
     '''
     returns tuple of an artist's info including name, total number of tracks on albums, and number of followers
     '''
-    #must update token every time :/ go to https://developer.spotify.com/console/get-album/
     url = artisturl(artistid)
     param = {'limit': 25,'offset': offset, 'access_token': token}
     response = requests.get(url, params = param)
     results = response.json()
     artistname = results['name']
-    numfollowing = int(results['followers']['total'])
+    numfollowers = int(results['followers']['total'])
     url = artistalbumsurl(artistid)
     param = {'limit': 25,'offset': offset, 'access_token': token}
     response = requests.get(url, params = param)
@@ -87,7 +104,7 @@ def create_table_one(artistid, token, offset):
         #feel free to add whatever data u want to gather here
         #https://developer.spotify.com/documentation/web-api/reference/#/operations/get-an-album
         #list of possible keys ^
-    return (artistname, numfollowing, totaltracks)
+    return (artistname, numfollowers, totaltracks)
 
 def main():
     favartists = {'Ed sheeran' : '6eUKZXaKkcviH0Ku9w2n3V',
@@ -101,18 +118,20 @@ def main():
     'Kanye West' : '5K4W6rqBFWDnAN6FQUkS6x',
     'Juice Wrld' :'4MCBfE4596Uoi2O4DtmEMz'}
     
-    cur, conn = createDB('spotify.db')
+    '''
     try:
-        cur.execute('SELECT name FROM spotify_results WHERE name  = Lil Uzi Vert')
+        cur.execute('SELECT name FROM spotify_results WHERE name  = ')
         start = cur.fetchone()
         start = start[0]
     except:
         start = 0
+    '''
 
-    token = 'BQDO6dUrWwNWoY6BZWU3VcaNFWuOGGlt0656i-pFH0LcWiRJ1DuDk4_f-qdBWFS1OUvnCj-qAEmMyTEdZEuTylss3YdML1uUItboQs-ZsmCib5aAECinoXfMT4Ms_8O3iX9_KDpI1FycPH4KjjcOVoMNcBrZfR66ML8'
-    for k in favartists.values():
-        data = create_table_two(k, token, start)
-        print(data)
-        print()
+    start = 0
+    #must update token every time :/ go to https://developer.spotify.com/console/get-album/
+    token = 'BQCwrYVcmzc1HggMwAtdobeyFLu9dfxxSFkfC3yZeTFaKIeRQcCv6wIsN9j3wc461aU7HqTCSbYx4i8U-x6TQtW7uXiLQBYYZatTfo-SH1B_UdA-cts9mmITjpGnO_rladXG_sPdmAXyWb3caIJ_iNwfZLFOodojBE8'
+    cur, conn = createDB('spotify.db')
+    create_spotifyartists_table(favartists, token, start, cur, conn)
+    create_spotifyalbums_table(favartists, token, start, cur, conn)
 
 main()
