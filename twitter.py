@@ -22,7 +22,7 @@ def setUpTwitterTable(favartists, cur, conn):
     '''
     This function takes in a list of artists and a cur/conn pointing to a database. 
     When run, it will populate the twitter table inside the database, inserting an entry for each 
-    artist inclduing information about their username, number of followers, and number of tweets.
+    artist including information about their username, number of followers, and number of tweets.
     '''
     cur.execute('DROP TABLE IF EXISTS twitter')
     cur.execute('CREATE TABLE twitter (artist_id INTEGER UNIQUE PRIMARY KEY, twitter_handle TEXT, follower_count INTEGER, tweet_count INETEGER)')
