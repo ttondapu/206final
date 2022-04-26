@@ -46,8 +46,29 @@ def graph_num_tracks(db_filename):
     plt.legend()
     plt.show()
 
+def graph_avg_album_length(db_filename):
+    path = os.path.dirname(os.path.abspath(__file__))
+    conn = sqlite3.connect(path+'/'+db_filename)
+    cur = conn.cursor()
+    cur.execute("SELECT artistname FROM spotifyartists")    
+    namelist = [x[0] for x in cur.fetchall()]
+    cur.execute("SELECT AVG(length) FROM spotifyalbums GROUP BY artistid")
+    averages = [float(x[0]) for x in cur.fetchall()]
+
+    plt.figure(dpi = 65)
+    plt.bar(namelist, averages)
+    plt.xlabel('Artist Name')
+    plt.ylabel('Average Album Length')
+    plt.title('Average Number of Tracks on Albums')
+    plt.show()
+
 def main():
-    #graph_avg_followers('finalproj.db')
-    graph_num_tracks('finalproj.db')
+    ans = int(input("enter a number to generate a graph:\n1 for avg followers across platforms\n2 for number of tracks available on platforms\n3 for average album length\n"))
+    if ans == 1:
+        graph_avg_followers('finalproj.db')
+    if ans == 2:
+        graph_num_tracks('finalproj.db')
+    if ans == 3:
+        graph_avg_album_length('finalproj.db')
 
 main()
