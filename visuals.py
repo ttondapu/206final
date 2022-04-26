@@ -17,7 +17,7 @@ def graph_avg_followers(db_filename):
     for item in cur.fetchall():
         averages.append(sum(item)//3)
     
-    write_to_csv('avg_followers.csv', ['artist name', 'number of followers'], [namelist, averages])
+    write_to_csv('avg_followers.csv', ['artist name', 'average number of followers across platforms'], [namelist, averages])
 
     plt.figure(dpi = 65)
     plt.bar(namelist, averages)
@@ -39,7 +39,7 @@ def graph_num_tracks(db_filename):
         sccounts.append(item[0])
         spotcounts.append(item[1])
     
-    write_to_csv('num_tracks_available.csv', ['artist name', 'soundcloud tracks', 'spotify tracks'], [namelist, sccounts, spotcounts])
+    write_to_csv('num_tracks_available.csv', ['artist name', 'number of soundcloud tracks', 'number of spotify tracks'], [namelist, sccounts, spotcounts])
 
     x_axis = np.arange(len(namelist))  
     plt.bar(x_axis - 0.2, sccounts, 0.4, label = 'SoundCloud')
@@ -60,7 +60,7 @@ def graph_avg_album_length(db_filename):
     cur.execute("SELECT AVG(length) FROM spotifyalbums GROUP BY artistid")
     averages = [float(x[0]) for x in cur.fetchall()]
 
-    write_to_csv('avg_album_length.csv', ['artist name', 'number of tracks'], [namelist, averages])
+    write_to_csv('avg_album_length.csv', ['artist name', 'average number of tracks per album'], [namelist, averages])
 
     plt.figure(dpi = 65)
     plt.bar(namelist, averages)

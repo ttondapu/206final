@@ -116,7 +116,7 @@ def main():
     'Kanye West' : '5K4W6rqBFWDnAN6FQUkS6x',
     'Juice Wrld' :'4MCBfE4596Uoi2O4DtmEMz'}
     
-    #must update token every time :/ go to https://developer.spotify.com/console/get-album/
+    #must update token every time :/ go to  
     start = 0
     token = 'BQAUIOxLVxt1kTcLfbGkrc13E7h-VqSZkIYuZk8u_HMLaJTlze7q5wwGi_WdiYy4_46GfKBcakpFkHpkA0UcSQxSfKGmyllG5vBr4oBMC_-Smz6ZwkzWqrrg_yk-hQVoekVWSxMENjoROM_6vtiq41UEFz45ck18mL0'
     cur, conn = createDB('finalproj.db')
