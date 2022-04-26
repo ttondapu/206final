@@ -6,7 +6,7 @@ import matplotlib
 import sqlite3
 import matplotlib.pyplot as plt
 
-bearer_token = 'AAAAAAAAAAAAAAAAAAAAAIRqbwEAAAAA4bw%2B4KetqBn%2BP57DDgFOKCZN6Qs%3DQJGvijx8WwBq28D4pUOZ2ZLMHicJe7g4A3cJGiKs9wDWigyQM0'
+bearer_token = 'AAAAAAAAAAAAAAAAAAAAAIRqbwEAAAAA2q5wMs3ND0cdnL%2FvWx%2FdoHP9szw%3Do1nyawbrzdzaYDeMM5dmulc0jwhvRHg9WWm68Rb6HAa6QafGmI'
 
 def createDB(filename):
     '''
@@ -18,26 +18,24 @@ def createDB(filename):
     cur = conn.cursor()
     return cur, conn
 
-def setUpTwitterTable(favartists, cur, conn):
+def setUpTwitterTable(favartists, keyrange, counter, cur, conn):
     '''
     This function takes in a list of artists and a cur/conn pointing to a database. 
     When run, it will populate the twitter table inside the database, inserting an entry for each 
     artist including information about their username, number of followers, and number of tweets.
     '''
-    cur.execute('DROP TABLE IF EXISTS twitter')
-    cur.execute('CREATE TABLE twitter (artist_id INTEGER UNIQUE PRIMARY KEY, twitter_handle TEXT, follower_count INTEGER, tweet_count INETEGER)')
-    counter = 0
-    for i in favartists.keys():
+    #cur.execute('DROP TABLE IF EXISTS twitter')
+    cur.execute('CREATE TABLE IF NOT EXISTS twitter (artist_id INTEGER UNIQUE PRIMARY KEY, twitter_handle TEXT, follower_count INTEGER, tweet_count INETEGER)')
+    for i in keyrange:
         print(i)
         url = create_url(favartists[i])
         data = get_artist_info(url)
-        if favartists[i] != '0':
-            twitter_handle = data[0]
-            follower_count = data[1]
-            tweet_count = data[2]
-            artist_id = counter
-            cur.execute("INSERT OR IGNORE INTO twitter (artist_id, twitter_handle, follower_count, tweet_count) VALUES (?,?,?,?)", (artist_id, twitter_handle, follower_count, tweet_count))
-            counter += 1
+        twitter_handle = data[0]
+        follower_count = data[1]
+        tweet_count = data[2]
+        artist_id = counter
+        cur.execute("INSERT OR IGNORE INTO twitter (artist_id, twitter_handle, follower_count, tweet_count) VALUES (?,?,?,?)", (artist_id, twitter_handle, follower_count, tweet_count))
+        counter += 1
     conn.commit()
 
 def create_url(user_id):
@@ -166,9 +164,16 @@ def main():
     'John Mayer':'335534204',
     'P!nk':'28706024',
     'AC/DC':'2836755090',
-    'ZAYN':'176566242',} 
-
+    'ZAYN':'176566242'} 
     cur, conn = createDB('finalproj.db')
-    setUpTwitterTable(favartists, cur, conn)
+    ans = int(input("enter a number 1-4 (representing a quarter of entries to insert): "))
+    if ans == 1:
+        setUpTwitterTable(favartists, list(favartists.keys())[0:25], 0, cur, conn)
+    elif ans == 2:
+        setUpTwitterTable(favartists, list(favartists.keys())[25:50], 25, cur, conn)
+    elif ans == 3:
+        setUpTwitterTable(favartists, list(favartists.keys())[50:75], 50, cur, conn)
+    elif ans == 4:
+        setUpTwitterTable(favartists, list(favartists.keys())[75:100], 75, cur, conn)
 
 main()
