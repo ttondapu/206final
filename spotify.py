@@ -129,11 +129,11 @@ def main():
     'Kanye West' : '5K4W6rqBFWDnAN6FQUkS6x',
     'Juice Wrld' :'4MCBfE4596Uoi2O4DtmEMz'}
     
-    #must update token every time :/ go to  
-    token = 'BQAUIOxLVxt1kTcLfbGkrc13E7h-VqSZkIYuZk8u_HMLaJTlze7q5wwGi_WdiYy4_46GfKBcakpFkHpkA0UcSQxSfKGmyllG5vBr4oBMC_-Smz6ZwkzWqrrg_yk-hQVoekVWSxMENjoROM_6vtiq41UEFz45ck18mL0'
+    #must update token every time :/ go to https://developer.spotify.com/console/get-album/  
+    token = 'BQBNkMkHtYvLvgDtUuCdp_Tzhna6A53snZeRjhlhxg4AZy0aUgy5JmX3IoUiZ9TP9pZ-zGZ63Mbl9klwU1Ngd2UBMNFISsyezjA_-C-TedpcvQ9Vzn7nVk_5jaEQf6VJv2Kt5-bo4NgArP7OkZL2DpVaPx3NJ9Kjm34'
     start = 0
     cur, conn = createDB('finalproj.db')
-    create_spotifyartists_table(favartists, token, start, cur, conn)
+    #create_spotifyartists_table(favartists, token, start, cur, conn)
     create_spotifyalbums_table(favartists, token, start, cur, conn)
 
 main()

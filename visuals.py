@@ -42,12 +42,10 @@ def graph_num_tracks(db_filename):
     cur = conn.cursor()
     cur.execute("SELECT artistname FROM spotifyartists")    
     namelist = [x[0] for x in cur.fetchall()]
-    sccounts = []
-    spotcounts = []
-    cur.execute("SELECT soundcloud_artists.num_tracks, spotifyartists.numtracks FROM soundcloud_artists JOIN spotifyartists ON spotifyartists.artistid = soundcloud_artists.artist_id")
-    for item in cur.fetchall():
-        sccounts.append(item[0])
-        spotcounts.append(item[1])
+    cur.execute("SELECT  numtracks FROM spotifyartists")
+    spotcounts = [x[0] for x in cur.fetchall()]
+    cur.execute("SELECT COUNT(track_name) FROM soundcloud_tracks GROUP BY artist_id")
+    sccounts = [x[0] for x in cur.fetchall()]
     
     write_to_csv('num_tracks_available.csv', ['artist name', 'number of soundcloud tracks', 'number of spotify tracks'], [namelist, sccounts, spotcounts])
 

@@ -24,14 +24,13 @@ def setUpSoundcloudArtistTable(favartists, cur, conn):
     which includes artist id, name, soundcloud followers, and number of tracks available on soundcloud.
     '''
     cur.execute('DROP TABLE IF EXISTS soundcloud_artists')
-    cur.execute('CREATE TABLE soundcloud_artists (artist_id INTEGER UNIQUE PRIMARY KEY, name TEXT, num_tracks INTEGER, num_followers INETEGER)')
+    cur.execute('CREATE TABLE soundcloud_artists (artist_id INTEGER UNIQUE PRIMARY KEY, name TEXT, num_followers INETEGER)')
     counter = 0
     for i in favartists.keys():
         artist_id = counter
         name = i
-        num_tracks = track_count(favartists[i])
         num_followers = artist_followers(favartists[i])
-        cur.execute("INSERT OR IGNORE INTO soundcloud_artists (artist_id, name, num_tracks, num_followers) VALUES (?,?,?,?)", (artist_id, name, num_tracks, num_followers))
+        cur.execute("INSERT OR IGNORE INTO soundcloud_artists (artist_id, name, num_followers) VALUES (?,?,?)", (artist_id, name, num_followers))
         counter+=1
     conn.commit()
 
@@ -72,24 +71,6 @@ def artist_followers(artist_html):
     s = s[0].replace(',', '') #to get rid of commas
     num = int(s) #to make integer
     return num
-
-def track_count(artist_html):
-    '''
-    This function returns the number of tracks on soundcloud for a given artist from an artist's SoundCloud page html.
-    '''
-    num_tracks = 0
-    with open(artist_html) as f:
-        soup = bs(f, 'html.parser')
-    # page = requests.get(url)
-    # soup = bs(page.text, 'html.parser') #requests
-    track_list = []
-    track_tag = soup.find_all('a', class_ = "sc-link-primary soundTitle__title sc-link-dark sc-text-h4")
-    for tag in track_tag:
-        title = tag.find('span', class_ = '')
-        track_list.append(title)
-    for track in track_list:
-        num_tracks += 1 
-    return num_tracks
 
 def all_tracks(artist_html):
     '''
