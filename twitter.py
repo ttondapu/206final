@@ -30,7 +30,7 @@ def setUpTwitterTable(favartists, cur, conn):
             follower_count = data[1]
             tweet_count = data[2]
             artist_id = counter
-            cur.execute("INSERT OR IGNORE INTO Twitter (artist_id, twitter_handle, follower_count, tweet_count) VALUES (?,?,?,?)", (artist_id, twitter_handle, follower_count, tweet_count))
+            cur.execute("INSERT OR IGNORE INTO twitter (artist_id, twitter_handle, follower_count, tweet_count) VALUES (?,?,?,?)", (artist_id, twitter_handle, follower_count, tweet_count))
             counter += 1
     conn.commit()
 

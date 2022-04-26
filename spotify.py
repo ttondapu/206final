@@ -24,14 +24,12 @@ def create_spotifyartists_table(favartists, token, offset, cur, conn):
     conn.commit()
 
 def create_spotifyalbums_table(favartists, token, offset, cur, conn):
-    counter = 0
     cur.execute("DROP TABLE IF EXISTS spotifyalbums")
     cur.execute("CREATE TABLE IF NOT EXISTS spotifyalbums (artistid INTEGER, albumid TEXT, albumname TEXT UNIQUE PRIMARY KEY, length INTEGER, releasedate STRING)")
     for i in range(len(list(favartists.values()))):
         insertval = spot_data_two(list(favartists.values())[i], token, offset)
         for album in insertval:
             cur.execute("INSERT OR IGNORE INTO spotifyalbums (artistid,albumid,albumname,length,releasedate) VALUES (?,?,?,?,?)", (i, counter, album[0], album[1], album[2]))
-            counter += 1 #increment unique id, but this skips sometimes because artists have duplicates
     conn.commit()
 
 def artistalbumsurl(artistid):
@@ -129,7 +127,7 @@ def main():
 
     start = 0
     #must update token every time :/ go to https://developer.spotify.com/console/get-album/
-    token = 'BQCwrYVcmzc1HggMwAtdobeyFLu9dfxxSFkfC3yZeTFaKIeRQcCv6wIsN9j3wc461aU7HqTCSbYx4i8U-x6TQtW7uXiLQBYYZatTfo-SH1B_UdA-cts9mmITjpGnO_rladXG_sPdmAXyWb3caIJ_iNwfZLFOodojBE8'
+    token = 'BQALyWB6jCTJSdT6aC9I7Kv0Ih4RfMsizBfE3hcsL8xvGoGJrZO8oU2rHXsIzUrLp9asLzVwziSHKIiC3R9CJpCXOhuHmms8myWQmlpWP8GHv05HUA'
     cur, conn = createDB('finalproj.db')
     create_spotifyartists_table(favartists, token, start, cur, conn)
     create_spotifyalbums_table(favartists, token, start, cur, conn)
