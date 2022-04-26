@@ -47,10 +47,10 @@ def create_url(user_id):
     return "https://api.twitter.com/2/users/{}?user.fields=public_metrics".format(user_id)
 
 def bearer_oauth(r):
-    """
+    '''
     DO NOT EDIT: This function is from the twitter dev site to authorize our program.
     It utilizes the bearer token found at the top.
-    """
+    '''
     r.headers["Authorization"] = f"Bearer {bearer_token}"
     r.headers["User-Agent"] = "v2FollowerLookupPython"
     return r
@@ -60,6 +60,7 @@ def get_artist_info(url):
     This function takes a twitter api url and returns the json response object.
     '''
     response = requests.request("GET", url, auth=bearer_oauth, params={})
+    #print(response.status_code)
     if response.status_code != 200:
         raise Exception("Request returned an error: {} {}".format(response.status_code, response.text))
     json_response = response.json()
@@ -75,7 +76,97 @@ def main():
     'Eminem' : '22940219',
     'Post Malone' : '913812620',
     'Kanye West' : '169686021',
-    'Juice Wrld' :'3676932858'}
+    'Juice Wrld' :'3676932858',
+    'Bad Bunny': '1059542139737128960',
+    'BTS': '335141638',
+    'J Balvin':'44670915',
+    'Coldplay':'18863815',
+    'XXXTENTACION':'754101056',
+    'Ozuna':'4873308778',
+    'Dua Lipa':'154101116',
+    'Khalid':'1852644804',
+    'Imagine Dragons':'75916180',
+    'Travis Scott':'135019364',
+    'Rihanna':'79293791',
+    'Maroon 5':'24886570',
+    'Shawn Mendes':'379408088',
+    'David Guetta':'23976386',
+    'Bruno Mars':'100220864',
+    'Calvin Harris':'18625669',
+    'Daddy Yankee':'36483808',
+    'Sam Smith':'457554412',
+    'Queen':'98765275',
+    'Kendrick Lamar':'23561980',
+    'The Chainsmokers':'36746176',
+    'One Direction':'209708391',
+    'Chris Brown':'119509520',
+    'Beyoncé':'31239408',
+    'Future':'51742969',
+    'Anuel AA':'703558015862104064',
+    'Nicki Minaj':'35787166',
+    'Lady Gaga':'14230524',
+    'J. Cole':'19028953',
+    'Halsey':'45709328',
+    'Selena Gomez':'23375688',
+    'Adele':'184910040',
+    'The Beatles':'27760317',
+    'Sia':'23497233',
+    'Maluma':'153433497',
+    'Twenty One Pilots':'59325073',
+    'Marshmello':'2987922767',
+    'Lil Uzi Vert':'34485937',
+    'Linkin Park':'19373710',
+    'Kygo':'1951639321',
+    'Katy Perry':'21447363',
+    'Avicii':'27476141',
+    'Farruko':'69413371',
+    'Little Mix':'380399508',
+    'Camila Cabello':'739784130',
+    'Rauw Alejandro':'1330718940',
+    'Jason Derulo':'28076276',
+    'Red Hot Chili Peppers':'297047872',
+    'Demi Lovato':'21111883',
+    'Arctic Monkeys':'49636886',
+    'Doja Cat':'568545739',
+    'Shakira':'44409004',
+    'Harry Styles':'181561712',
+    'KAROL G':'78335735',
+    'Nicky Jam':'246967511',
+    'OneRepublic':'21133007',
+    'Miley Cyrus':'268414482',
+    'Michael Jackson':'54387680',
+    'Martin Garrix':'134234000',
+    'Charlie Puth':'15945351',
+    'Pitbull':'31927467',
+    'Sebastian Yatra':'1029323618',
+    'G-Eazy':'17936793',
+    'Panic! At The Disco':'16213013',
+    'DaBaby':'3004871415',
+    'Cardi B':'866953267',
+    'Major Lazer':'30513101',
+    'Lil Baby':'816412233488015360',
+    'Ellie Goulding':'20565284',
+    'Lil Wayne':'116362700',
+    'Young Thug':'238763290',
+    '21 Savage':'260114837',
+    'Pop Smoke':'1131025001434497024',
+    'Wiz Khalifa':'20322929',
+    'Sech':'837110334800424960',
+    'Mac Miller':'23065354',
+    'Myke Towers':'302856349',
+    'Diplo':'17174309',
+    'Metallica':'238475531',
+    'Fall Out Boy':'16212952',
+    'Lil Nas X':'754006735468261376',
+    'Lil Peep':'2586341939',
+    'Logic':'141944292',
+    'Alan Walker':'2561704644',
+    'Migos':'353029369',
+    'Tyga':'22733444',
+    'John Mayer':'335534204',
+    'P!nk':'28706024',
+    'AC/DC':'2836755090',
+    'ZAYN':'176566242',} 
 
     cur, conn = createDB('finalproj.db')
     setUpTwitterTable(favartists, cur, conn)
