@@ -10,7 +10,8 @@ bearer_token = 'AAAAAAAAAAAAAAAAAAAAAIRqbwEAAAAA4bw%2B4KetqBn%2BP57DDgFOKCZN6Qs%
 
 def createDB(filename):
     '''
-    initializes database
+    This function initializes the database (if not already created) to be used throughout this project.
+    filename.db will be found in the current working directory. 
     '''
     path = os.path.dirname(os.path.abspath(__file__))
     conn = sqlite3.connect(path+'/'+filename)
@@ -18,6 +19,11 @@ def createDB(filename):
     return cur, conn
 
 def setUpTwitterTable(favartists, cur, conn):
+    '''
+    This function takes in a list of artists and a cur/conn pointing to a database. 
+    When run, it will populate the twitter table inside the database, inserting an entry for each 
+    artist inclduing information about their username, number of followers, and number of tweets.
+    '''
     cur.execute('DROP TABLE IF EXISTS twitter')
     cur.execute('CREATE TABLE twitter (artist_id INTEGER UNIQUE PRIMARY KEY, twitter_handle TEXT, follower_count INTEGER, tweet_count INETEGER)')
     counter = 0
@@ -36,21 +42,24 @@ def setUpTwitterTable(favartists, cur, conn):
 
 def create_url(user_id):
     '''
-    returns an api url given an artist's twitter id
+    This function takes in a twitter user id and returns a url to access their account from the API.
     '''
     return "https://api.twitter.com/2/users/{}?user.fields=public_metrics".format(user_id)
 
 def bearer_oauth(r):
     """
-    from twitter site to authorize
+    DO NOT EDIT: This function is from the twitter dev site to authorize our program.
+    It utilizes the bearer token found at the top.
     """
     r.headers["Authorization"] = f"Bearer {bearer_token}"
     r.headers["User-Agent"] = "v2FollowerLookupPython"
     return r
 
 def get_artist_info(url):
+    '''
+    This function takes a twitter api url and returns the json response object.
+    '''
     response = requests.request("GET", url, auth=bearer_oauth, params={})
-    #print(response.status_code)
     if response.status_code != 200:
         raise Exception("Request returned an error: {} {}".format(response.status_code, response.text))
     json_response = response.json()

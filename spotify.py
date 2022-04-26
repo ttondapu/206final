@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 
 def createDB(filename):
     '''
-    initializes database
+    This function initializes the database (if not already created) to be used throughout this project.
+    filename.db will be found in the current working directory. 
     '''
     path = os.path.dirname(os.path.abspath(__file__))
     conn = sqlite3.connect(path+'/'+filename)
@@ -16,6 +17,11 @@ def createDB(filename):
     return cur, conn
 
 def create_spotifyartists_table(favartists, token, offset, cur, conn):
+    '''
+    This function takes in a list of artists, a token, an offset, and a database cur/conn.
+    It then creates a table inside the database pointed to by cur/conn with an artist's information
+    which includes artist id, name, spotiy followers, and number of tracks available on spotify.
+    '''
     cur.execute("DROP TABLE IF EXISTS spotifyartists")
     cur.execute("CREATE TABLE IF NOT EXISTS spotifyartists (artistid INTEGER PRIMARY KEY UNIQUE, artistname TEXT, numfollowers INTEGER, numtracks INTEGER)")
     for i in range(len(list(favartists.values()))):
@@ -24,6 +30,11 @@ def create_spotifyartists_table(favartists, token, offset, cur, conn):
     conn.commit()
 
 def create_spotifyalbums_table(favartists, token, offset, cur, conn):
+    '''
+    This function takes in a list of artists, a token, an offset, and a database cur/conn.
+    It then creates a table inside the database pointed to by cur/conn with each artist's discography information
+    which includes artist id, album name, spotify, length of project, and release date.
+    '''
     cur.execute("DROP TABLE IF EXISTS spotifyalbums")
     cur.execute("CREATE TABLE IF NOT EXISTS spotifyalbums (artistid INTEGER, albumname TEXT UNIQUE PRIMARY KEY, length INTEGER, releasedate STRING)")
     for i in range(len(list(favartists.values()))):
@@ -34,25 +45,26 @@ def create_spotifyalbums_table(favartists, token, offset, cur, conn):
 
 def artistalbumsurl(artistid):
     '''
-    generates a url to access an artist's discography
+    Given an artist ID, this function returns an API url to access all of their albums.
     '''
     return "https://api.spotify.com/v1/artists/" + artistid + "/albums"
 
 def albumurl(albumid):
     '''
-    generates a url to access a specific album
+    Given an album id, this function returns an API url to access a specific album.
     '''
     return "https://api.spotify.com/v1/albums/" + albumid
 
 def artisturl(artistid):
     '''
-    generates a url to access a specific artist
+    Given an album id, this function returns an API url to access a specific artist.
     '''
     return "https://api.spotify.com/v1/artists/" + artistid
 
 def spot_data_two(artistid, token, offset): 
     '''
-    returns list of an artist's releases with number of tracks and release date
+    This function takes in an artist id and generates a list of tuples which will be 
+    used to populate the albums table with entries about each of the artist's releases.
     '''
     tracklist = []
     url = artistalbumsurl(artistid)
@@ -77,7 +89,8 @@ def spot_data_two(artistid, token, offset):
 
 def spot_data_one(artistid, token, offset): 
     '''
-    returns tuple of an artist's info including name, total number of tracks on albums, and number of followers
+    This function takes in an artist id and generates tuple about the artist's 
+    name, number of spotify followers, and total tracks available on spotify.
     '''
     url = artisturl(artistid)
     param = {'limit': 25,'offset': offset, 'access_token': token}
@@ -117,8 +130,8 @@ def main():
     'Juice Wrld' :'4MCBfE4596Uoi2O4DtmEMz'}
     
     #must update token every time :/ go to  
-    start = 0
     token = 'BQAUIOxLVxt1kTcLfbGkrc13E7h-VqSZkIYuZk8u_HMLaJTlze7q5wwGi_WdiYy4_46GfKBcakpFkHpkA0UcSQxSfKGmyllG5vBr4oBMC_-Smz6ZwkzWqrrg_yk-hQVoekVWSxMENjoROM_6vtiq41UEFz45ck18mL0'
+    start = 0
     cur, conn = createDB('finalproj.db')
     create_spotifyartists_table(favartists, token, start, cur, conn)
     create_spotifyalbums_table(favartists, token, start, cur, conn)

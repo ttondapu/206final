@@ -7,6 +7,11 @@ import numpy as np
 import csv
 
 def graph_avg_followers(db_filename):
+    '''
+    Given the database, this function outputs a csv file to the current directory and 
+    displays a bar chart visualizing each artist's average follower count across 
+    twitter, spotify, and soundcloud.
+    '''
     path = os.path.dirname(os.path.abspath(__file__))
     conn = sqlite3.connect(path+'/'+db_filename)
     cur = conn.cursor()
@@ -27,6 +32,11 @@ def graph_avg_followers(db_filename):
     plt.show()
 
 def graph_num_tracks(db_filename):
+    '''
+    Given the database, this function outputs a csv file to the current directory and 
+    displays a bar chart visualizing the number of tracks available on soundcloud
+    and spotify respectively for each artist.
+    '''
     path = os.path.dirname(os.path.abspath(__file__))
     conn = sqlite3.connect(path+'/'+db_filename)
     cur = conn.cursor()
@@ -52,6 +62,10 @@ def graph_num_tracks(db_filename):
     plt.show()
 
 def graph_avg_album_length(db_filename):
+    '''
+    Given the database, this function outputs a csv file to the current directory and 
+    displays a bar chart of each artist's average album length based on all of their releases.
+    '''
     path = os.path.dirname(os.path.abspath(__file__))
     conn = sqlite3.connect(path+'/'+db_filename)
     cur = conn.cursor()
@@ -70,6 +84,11 @@ def graph_avg_album_length(db_filename):
     plt.show()
 
 def write_to_csv(filename, headerlist, datalists):
+    '''
+    Given a desired output file name, a list of headers, and a list of data lists,
+    this function writes a csv file where each entry contains a values from the lists.
+    This is used as a helper function inside the visualization/generation functions.
+    '''
     with open(filename, 'w', newline='') as f:
         cwriter = csv.writer(f)
         headline = [x for x in headerlist]
@@ -81,6 +100,10 @@ def write_to_csv(filename, headerlist, datalists):
             cwriter.writerow(temp)
 
 def main():
+    '''
+    Main will prompt for a number representing the three visualization options.
+    Upon entering a number, a csv file will be created and a graphic will pop up.
+    '''
     ans = int(input("enter a number to generate a graph:\n1 for avg followers across platforms\n2 for number of tracks available on platforms\n3 for average album length\n"))
     if ans == 1:
         graph_avg_followers('finalproj.db')

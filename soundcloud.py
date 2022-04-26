@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 
 def createDB(filename):
     '''
-    initializes database
+    This function initializes the database (if not already created) to be used throughout this project.
+    filename.db will be found in the current working directory. 
     '''
     path = os.path.dirname(os.path.abspath(__file__))
     conn = sqlite3.connect(path+'/'+filename)
@@ -17,6 +18,11 @@ def createDB(filename):
     return cur, conn
 
 def setUpSoundcloudArtistTable(favartists, cur, conn):
+    '''
+    This function takes in a list of artists, a token, an offset, and a database cur/conn.
+    It then creates a table inside the database pointed to by cur/conn with an artist's information
+    which includes artist id, name, soundcloud followers, and number of tracks available on soundcloud.
+    '''
     cur.execute('DROP TABLE IF EXISTS soundcloud_artists')
     cur.execute('CREATE TABLE soundcloud_artists (artist_id INTEGER UNIQUE PRIMARY KEY, name TEXT, num_tracks INTEGER, num_followers INETEGER)')
     counter = 0
@@ -29,7 +35,12 @@ def setUpSoundcloudArtistTable(favartists, cur, conn):
         counter+=1
     conn.commit()
 
-def setUpSoundcloudTrackTable(favartists, cur, conn): #TODO
+def setUpSoundcloudTrackTable(favartists, cur, conn):
+    '''
+    This function takes in a list of artists, a token, an offset, and a database cur/conn.
+    It then creates a table inside the database pointed to by cur/conn with each track for each artist,
+    in the form of artist id, track name.
+    '''
     cur.execute('DROP TABLE IF EXISTS soundcloud_tracks')
     cur.execute('CREATE TABLE IF NOT EXISTS soundcloud_tracks (artist_id INTEGER, track_name TEXT PRIMARY KEY UNIQUE)')
     counter = 0
@@ -43,14 +54,14 @@ def setUpSoundcloudTrackTable(favartists, cur, conn): #TODO
     conn.commit()
 
 def get_url(artist_user):
-     url = 'https://soundcloud.com/'+ artist_user + '/tracks'
-     return url
+    '''
+    This function generates a url to access the html of an artist's tracks 
+    '''
+    return 'https://soundcloud.com/'+ artist_user + '/tracks'
 
 def artist_followers(artist_html):
-
     '''
-    generates the number of followers for a given artist and file saved from an artist's SoundCloud page
-
+    This function returns the number of followers for a given artist from an artist's SoundCloud page html.
     '''
     with open(artist_html) as f:
         soup = bs(f, 'html.parser')
@@ -63,6 +74,9 @@ def artist_followers(artist_html):
     return num
 
 def track_count(artist_html):
+    '''
+    This function returns the number of tracks on soundcloud for a given artist from an artist's SoundCloud page html.
+    '''
     num_tracks = 0
     with open(artist_html) as f:
         soup = bs(f, 'html.parser')
@@ -78,6 +92,9 @@ def track_count(artist_html):
     return num_tracks
 
 def all_tracks(artist_html):
+    '''
+    This function takes an artist's soundcloud html and returns a list of track titles for all tracks available
+    '''
     with open(artist_html) as f:
         soup = bs(f, 'html.parser')
     # page = requests.get(url)
@@ -102,7 +119,7 @@ def main():
     'Juice Wrld' :'juice_wrld.html'}
 
     cur, conn = createDB('finalproj.db')
-    #setUpSoundcloudArtistTable(favartists, cur, conn)
+    setUpSoundcloudArtistTable(favartists, cur, conn)
     setUpSoundcloudTrackTable(favartists, cur, conn)
 
 main()
