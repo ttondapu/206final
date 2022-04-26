@@ -2,10 +2,8 @@ import requests
 from bs4 import BeautifulSoup as bs
 import json
 import os
-import matplotlib
 import sqlite3
 import matplotlib.pyplot as plt
-from sqlalchemy import all_
 
 #user_agent = {'User-agent': 'Mozilla/5.0'}
 
@@ -43,7 +41,6 @@ def setUpSoundcloudTrackTable(favartists, cur, conn): #TODO
         for track in tracks:
             cur.execute("INSERT OR IGNORE INTO soundcloud_tracks (artist_id, track_name) VALUES (?,?)", (artist_id, track))
     conn.commit()
-
 
 def get_url(artist_user):
      url = 'https://soundcloud.com/'+ artist_user + '/tracks'
@@ -91,7 +88,6 @@ def all_tracks(artist_html):
         title = tag.find('span').text
         track_list.append(title)
     return track_list
-
 
 def main():
     favartists = {'Ed Sheeran' : 'ed_sheeran.html',

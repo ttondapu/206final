@@ -25,11 +25,11 @@ def create_spotifyartists_table(favartists, token, offset, cur, conn):
 
 def create_spotifyalbums_table(favartists, token, offset, cur, conn):
     cur.execute("DROP TABLE IF EXISTS spotifyalbums")
-    cur.execute("CREATE TABLE IF NOT EXISTS spotifyalbums (artistid INTEGER, albumid TEXT, albumname TEXT UNIQUE PRIMARY KEY, length INTEGER, releasedate STRING)")
+    cur.execute("CREATE TABLE IF NOT EXISTS spotifyalbums (artistid INTEGER, albumname TEXT UNIQUE PRIMARY KEY, length INTEGER, releasedate STRING)")
     for i in range(len(list(favartists.values()))):
         insertval = spot_data_two(list(favartists.values())[i], token, offset)
         for album in insertval:
-            cur.execute("INSERT OR IGNORE INTO spotifyalbums (artistid,albumid,albumname,length,releasedate) VALUES (?,?,?,?,?)", (i, counter, album[0], album[1], album[2]))
+            cur.execute("INSERT OR IGNORE INTO spotifyalbums (artistid,albumname,length,releasedate) VALUES (?,?,?,?)", (i, album[0], album[1], album[2]))
     conn.commit()
 
 def artistalbumsurl(artistid):
@@ -107,7 +107,7 @@ def spot_data_one(artistid, token, offset):
 def main():
     favartists = {'Ed sheeran' : '6eUKZXaKkcviH0Ku9w2n3V',
     'The Weeknd' : '1Xyo4u8uXC1ZmMpatF05PJ',  
-    'Ariana Grande'	: '66CXWjxzNUsdJxJ2JdwvnR',
+    'Billie Eilish'	: '6qqNVTkY8uBg9cP3Jd7DAH',
     'Justin Bieber' : '1uNFoZAHBGtllmzznpCI3s',
     'Taylor Swift' : '06HL4z0CvFAxyc27GXpf02',
     'Drake' : '3TVXtAsR1Inumwj472S9r4',
@@ -116,18 +116,9 @@ def main():
     'Kanye West' : '5K4W6rqBFWDnAN6FQUkS6x',
     'Juice Wrld' :'4MCBfE4596Uoi2O4DtmEMz'}
     
-    '''
-    try:
-        cur.execute('SELECT name FROM spotify_results WHERE name  = ')
-        start = cur.fetchone()
-        start = start[0]
-    except:
-        start = 0
-    '''
-
-    start = 0
     #must update token every time :/ go to https://developer.spotify.com/console/get-album/
-    token = 'BQALyWB6jCTJSdT6aC9I7Kv0Ih4RfMsizBfE3hcsL8xvGoGJrZO8oU2rHXsIzUrLp9asLzVwziSHKIiC3R9CJpCXOhuHmms8myWQmlpWP8GHv05HUA'
+    start = 0
+    token = 'BQAUIOxLVxt1kTcLfbGkrc13E7h-VqSZkIYuZk8u_HMLaJTlze7q5wwGi_WdiYy4_46GfKBcakpFkHpkA0UcSQxSfKGmyllG5vBr4oBMC_-Smz6ZwkzWqrrg_yk-hQVoekVWSxMENjoROM_6vtiq41UEFz45ck18mL0'
     cur, conn = createDB('finalproj.db')
     create_spotifyartists_table(favartists, token, start, cur, conn)
     create_spotifyalbums_table(favartists, token, start, cur, conn)
