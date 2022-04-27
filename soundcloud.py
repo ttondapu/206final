@@ -86,7 +86,7 @@ def all_tracks(artist_html):
         track_list.append(title)
     return track_list
 
-def main():
+def main(db_filename):
     favartists = {'Ed Sheeran' : 'ed_sheeran.html',
     'The Weeknd' : 'the_weeknd.html',  
     'Billie Eilish'	: 'billie_eilish.html',
@@ -98,8 +98,8 @@ def main():
     'Kanye West' : 'kanye_west.html',
     'Juice Wrld' :'juice_wrld.html'}
 
-    cur, conn = createDB('finalproj.db')
+    cur, conn = createDB(db_filename)
     setUpSoundcloudArtistTable(favartists, cur, conn)
     setUpSoundcloudTrackTable(favartists, cur, conn)
 
-main()
+main('finalproj.db')

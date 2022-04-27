@@ -115,7 +115,7 @@ def spot_data_one(artistid, token, offset):
         #list of possible keys ^
     return (artistname, numfollowers, totaltracks)
 
-def main():
+def main(db_filename):
     favartists = {'Ed sheeran' : '6eUKZXaKkcviH0Ku9w2n3V',
     'The Weeknd' : '1Xyo4u8uXC1ZmMpatF05PJ',  
     'Billie Eilish'	: '6qqNVTkY8uBg9cP3Jd7DAH',
@@ -130,8 +130,8 @@ def main():
     #must update token every time :/ go to https://developer.spotify.com/console/get-album/  
     token = 'BQAYu3ZDagSKs6xQryTBPtTKQH1lMRrnw3KtlXG9HZRhGPSpHs99vltqxvC9GhDi9WXxJl8_5b7YyLYp9LRGtLBxOxI_ySPnbWEUHFhmTe_qy7oDqYqow6IcQabF9qrpSjRRg4dsNooScJ3tEZf9A3kIqoI62KdNgeQ'
     start = 0
-    cur, conn = createDB('twittertest.db')
+    cur, conn = createDB(db_filename)
     create_spotifyartists_table(favartists, token, start, cur, conn)
     create_spotifyalbums_table(favartists, token, start, cur, conn)
 
-main()
+main('finalproj.db')
