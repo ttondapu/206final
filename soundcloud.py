@@ -23,7 +23,6 @@ def setUpSoundcloudArtistTable(favartists, cur, conn):
     It then creates a table inside the database pointed to by cur/conn with an artist's information
     which includes artist id, name, soundcloud followers (and formerly number of tracks available on soundcloud).
     '''
-    cur.execute('DROP TABLE IF EXISTS soundcloud_artists')
     cur.execute('CREATE TABLE soundcloud_artists (artist_id INTEGER UNIQUE PRIMARY KEY, name TEXT, num_followers INETEGER)')
     counter = 0
     for i in favartists.keys():

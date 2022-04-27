@@ -22,7 +22,6 @@ def create_spotifyartists_table(favartists, token, offset, cur, conn):
     It then creates a table inside the database pointed to by cur/conn with an artist's information
     which includes artist id, name, spotiy followers, and number of tracks available on spotify.
     '''
-    cur.execute("DROP TABLE IF EXISTS spotifyartists")
     cur.execute("CREATE TABLE IF NOT EXISTS spotifyartists (artistid INTEGER PRIMARY KEY UNIQUE, artistname TEXT, numfollowers INTEGER, numtracks INTEGER)")
     for i in range(len(list(favartists.values()))):
         insertval = spot_data_one(list(favartists.values())[i], token, offset)
@@ -35,7 +34,6 @@ def create_spotifyalbums_table(favartists, token, offset, cur, conn):
     It then creates a table inside the database pointed to by cur/conn with each artist's discography information
     which includes artist id, album name, spotify, length of project, and release date.
     '''
-    cur.execute("DROP TABLE IF EXISTS spotifyalbums")
     cur.execute("CREATE TABLE IF NOT EXISTS spotifyalbums (artistid INTEGER, albumname TEXT UNIQUE PRIMARY KEY, length INTEGER, releasedate STRING)")
     for i in range(len(list(favartists.values()))):
         insertval = spot_data_two(list(favartists.values())[i], token, offset)
@@ -130,10 +128,10 @@ def main():
     'Juice Wrld' :'4MCBfE4596Uoi2O4DtmEMz'}
     
     #must update token every time :/ go to https://developer.spotify.com/console/get-album/  
-    token = 'BQDShYJGQVsaAx1JvoFwRhBPYFYZCrlBuYjj_JgMpjYZcZZw2sM2DO9fCxFqplmV0y4QDNvpr957Rx3GglqIemm28NjI3B_0znbMTx_h5NsycVGa4lAXOxiohFmHKWNs-FeTHPQHqUi6H1-B_sGjyMBbasCP6uPNp0Q'
+    token = 'BQAYu3ZDagSKs6xQryTBPtTKQH1lMRrnw3KtlXG9HZRhGPSpHs99vltqxvC9GhDi9WXxJl8_5b7YyLYp9LRGtLBxOxI_ySPnbWEUHFhmTe_qy7oDqYqow6IcQabF9qrpSjRRg4dsNooScJ3tEZf9A3kIqoI62KdNgeQ'
     start = 0
-    cur, conn = createDB('finalproj.db')
-    #create_spotifyartists_table(favartists, token, start, cur, conn)
+    cur, conn = createDB('twittertest.db')
+    create_spotifyartists_table(favartists, token, start, cur, conn)
     create_spotifyalbums_table(favartists, token, start, cur, conn)
 
 main()

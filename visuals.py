@@ -97,17 +97,18 @@ def write_to_csv(filename, headerlist, datalists):
                 temp.append(j[i])
             cwriter.writerow(temp)
 
-def main():
+def main(db_filename):
     '''
     Main will prompt for a number representing the three visualization options.
+    It will create/connect to the database passed in to access the five tables.
     Upon entering a number, a csv file will be created and a graphic will pop up.
     '''
     ans = int(input("enter a number to generate a graph:\n1 for avg followers across platforms\n2 for number of tracks available on platforms\n3 for average album length\n"))
     if ans == 1:
-        graph_avg_followers('finalproj.db')
+        graph_avg_followers(db_filename)
     if ans == 2:
-        graph_num_tracks('finalproj.db')
+        graph_num_tracks(db_filename)
     if ans == 3:
-        graph_avg_album_length('finalproj.db')
+        graph_avg_album_length(db_filename)
 
-main()
+main('finalproj.db')

@@ -24,7 +24,6 @@ def setUpTwitterTable(favartists, keyrange, counter, cur, conn):
     When run, it will populate the twitter table inside the database, inserting an entry for each 
     artist including information about their username, number of followers, and number of tweets.
     '''
-    #cur.execute('DROP TABLE IF EXISTS twitter')
     cur.execute('CREATE TABLE IF NOT EXISTS twitter (artist_id INTEGER UNIQUE PRIMARY KEY, twitter_handle TEXT, follower_count INTEGER, tweet_count INETEGER)')
     for i in keyrange:
         print(i)
@@ -64,7 +63,11 @@ def get_artist_info(url):
     json_response = response.json()
     return((json_response['data']['username'], json_response['data']['public_metrics']['followers_count'], json_response['data']['public_metrics']['tweet_count']))
 
-def main():
+def main(dbfilename):
+    '''
+    main() prompts the user for a number 1-4 and will populate the twitter table in the database passed in.
+    to fully populate, run 4 times and each time type in 1/2/3/4 in that order to fill all 100 entries.
+    '''
     favartists = {'Ed Sheeran' : '85452649',
     'The Weeknd' : '255388236',  
     'Billie Eilish'	: '2150327072',
@@ -165,7 +168,7 @@ def main():
     'P!nk':'28706024',
     'AC/DC':'2836755090',
     'ZAYN':'176566242'} 
-    cur, conn = createDB('finalproj.db')
+    cur, conn = createDB(dbfilename)
     ans = int(input("enter a number 1-4 (representing a quarter of entries to insert): "))
     if ans == 1:
         setUpTwitterTable(favartists, list(favartists.keys())[0:25], 0, cur, conn)
@@ -176,4 +179,4 @@ def main():
     elif ans == 4:
         setUpTwitterTable(favartists, list(favartists.keys())[75:100], 75, cur, conn)
 
-main()
+main('finalproj.db')
