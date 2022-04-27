@@ -5,8 +5,6 @@ import os
 import sqlite3
 import matplotlib.pyplot as plt
 
-#user_agent = {'User-agent': 'Mozilla/5.0'}
-
 def createDB(filename):
     '''
     This function initializes the database (if not already created) to be used throughout this project.
@@ -23,7 +21,7 @@ def setUpSoundcloudArtistTable(favartists, cur, conn):
     It then creates a table inside the database pointed to by cur/conn with an artist's information
     which includes artist id, name, soundcloud followers (and formerly number of tracks available on soundcloud).
     '''
-    cur.execute('CREATE TABLE soundcloud_artists (artist_id INTEGER UNIQUE PRIMARY KEY, name TEXT, num_followers INETEGER)')
+    cur.execute('CREATE TABLE IF NOT EXISTS soundcloud_artists (artist_id INTEGER UNIQUE PRIMARY KEY, name TEXT, num_followers INETEGER)')
     counter = 0
     for i in favartists.keys():
         artist_id = counter
@@ -39,7 +37,6 @@ def setUpSoundcloudTrackTable(favartists, cur, conn):
     It then creates a table inside the database pointed to by cur/conn with each track for each artist,
     in the form of artist id, track name.
     '''
-    cur.execute('DROP TABLE IF EXISTS soundcloud_tracks')
     cur.execute('CREATE TABLE IF NOT EXISTS soundcloud_tracks (artist_id INTEGER, track_name TEXT PRIMARY KEY UNIQUE)')
     counter = 0
     for i in favartists.keys(): 
@@ -63,8 +60,6 @@ def artist_followers(artist_html):
     '''
     with open(artist_html) as f:
         soup = bs(f, 'html.parser')
-    # page = requests.get(url, headers=user_agent)
-    # soup = bs(page.text, 'html.parser')
     num_followers = soup.find('a', class_ = "infoStats__statLink sc-link-light sc-link-primary").get('title')
     s = num_followers.split()
     s = s[0].replace(',', '') #to get rid of commas
@@ -77,8 +72,6 @@ def all_tracks(artist_html):
     '''
     with open(artist_html) as f:
         soup = bs(f, 'html.parser')
-    # page = requests.get(url)
-    # soup = bs(page.text, 'html.parser') #requests
     track_list = []
     track_tag = soup.find_all('a', class_ = "sc-link-primary soundTitle__title sc-link-dark sc-text-h4")
     for tag in track_tag:
